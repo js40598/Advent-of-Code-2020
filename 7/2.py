@@ -1,39 +1,30 @@
+from bags import extract_rules
+
 with open('input.txt') as file:
     tab = []
     for line in file:
-        tab.append(line.strip().split(' contain '))
-
-for i in range(0, len(tab)):
-    tab[i][0] = tab[i][0].split(' ')
-    tab[i][0].pop()
-    tab[i][0] = ' '.join(tab[i][0])
-
-for i in range(0, len(tab)):
-    tab[i][1] = tab[i][1].split(', ')
-    for j in range(0, len(tab[i][1])):
-
-        tab[i][1][j] = tab[i][1][j].split(' ')
-        tab[i][1][j].pop()
-        tab[i][1][j] = [tab[i][1][j][0], ' '.join(tab[i][1][j][1::])]
-
-for b in tab:
-    if b[0] in 'drab fuchsia mirrored purple dotted green':
-        print(b)
+        tab.append(line.strip())
 
 
-def required_bags(pattern, tab):
+def count_required_bags(pattern, rules):
     output = 0
-    for i in range(0, len(tab)):
-        if tab[i][0] == pattern:
-            for j in range(0, len(tab[i][1])):
-                try:
-                    output += int(tab[i][1][j][0])
-                    rec = required_bags(tab[i][1][j][1], tab)
-                    output += (int(tab[i][1][j][0]) * rec) if rec != '0' else 0
-                except ValueError:
-                    pass
+    try:
+        rule = rules[pattern]
+    except KeyError:
+        return 1
+
+    for value in rule:
+        print(value)
+        try:
+            output += int(value[0])
+            rec = count_required_bags(value[1], rules)
+            output += rec * int(value[0])
+        except ValueError:
+            output += 0
+
     return output
 
 
-print(required_bags('shiny gold', tab))
+rules = extract_rules(tab)
+print(count_required_bags('shiny gold', rules))
 
