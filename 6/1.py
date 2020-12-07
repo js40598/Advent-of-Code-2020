@@ -1,22 +1,14 @@
+from groups import extract_groups, unique_correct_answers
+
 with open('input.txt') as file:
-    groups = []
-    init = True
+    tab = []
     for line in file:
-        if init:
-            groups.append([line.strip()])
-            init = False
-        else:
-            if not line.strip():
-                groups.append([])
-            else:
-                groups[-1].append(line.strip())
+        tab.append(line.strip())
+
+groups = extract_groups(tab)
 
 counter = 0
 for group in groups:
-    group_answers = set()
-    for person in group:
-        for answer in person:
-            group_answers.add(answer)
-    counter += len(group_answers)
+    counter += unique_correct_answers(group)
 
 print(counter)
