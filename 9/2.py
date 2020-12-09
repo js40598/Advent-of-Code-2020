@@ -8,9 +8,11 @@ with open('input.txt') as file:
 
 def find_contigous_set(tab, value):
     for i in range(0, len(tab)):
+        contigous = [tab[i]]
         for j in range(i+1, len(tab)):
-            if sum(tab[i:j+1]) == value:
-                return min(tab[i:j]) + max(tab[i:j])
+            contigous.append(tab[j])
+            if sum(contigous) == value:
+                return min(contigous) + max(contigous)
 
 
 invalid = find_first_invalid(tab)
