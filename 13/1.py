@@ -1,18 +1,17 @@
 with open('input.txt') as file:
-    tab = []
     for line in file:
-        tab.append(line.strip().split(','))
+        if ',' in line:
+            tab = line.strip().split(',')
+        else:
+            timestamp = int(line.strip())
 
-counter = 0
-while 'x' in tab[1]:
-    if tab[1][counter] == 'x':
-        tab[1].pop(counter)
+buses = []
+for i in range(0, len(tab)):
+    if tab[i] == 'x':
+        pass
     else:
-        counter += 1
+        buses.append(int(tab[i]))
 
-tab[0] = int(tab[0][0])
-departs = []
-for i in range(0, len(tab[1])):
-    departs.append((int(tab[0] / int(tab[1][i])) + 1) * int(tab[1][i]))
-print(int(tab[1][departs.index(min(departs))]) * (min(departs) - tab[0]))
-
+output = sorted(buses, key=lambda l: timestamp % l, reverse=True)[0]
+output = (output - timestamp % output) * output
+print(output)
