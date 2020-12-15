@@ -1,4 +1,6 @@
-input = [2,0,1,7,4,14,18]
+input = [0, 3, 6]
+
+spoken = 6
 
 dictionary = {}
 turn = 1
@@ -15,30 +17,29 @@ while turn <= 30000000:
         last_spoken = input[turn-1]
     else:
         try:
-            if len(dictionary[last_spoken]) == 2:
-                last_spoken = dictionary[last_spoken][1] - dictionary[last_spoken][0]
-                try:
-                    if len(dictionary[last_spoken]) == 2:
-                        dictionary[last_spoken].pop(0)
-                        dictionary[last_spoken].append(turn)
-                    elif len(dictionary[last_spoken]) == 1:
-                        dictionary[last_spoken].append(turn)
-                except KeyError:
-                    dictionary[last_spoken] = [turn]
-            elif len(dictionary[last_spoken]) == 1:
-                last_spoken = 0
-                try:
-                    if len(dictionary[last_spoken]) == 2:
-                        dictionary[last_spoken].pop(0)
-                        dictionary[last_spoken].append(turn)
-                    elif len(dictionary[last_spoken]) == 1:
-                        dictionary[last_spoken].append(turn)
-                except KeyError:
-                    dictionary[last_spoken] = [turn]
+            last_spoken = dictionary[last_spoken][1] - dictionary[last_spoken][0]
+            try:
+                dictionary[last_spoken][0] = dictionary[last_spoken][1]
+                dictionary[last_spoken][1] = turn
+            except IndexError:
+                dictionary[last_spoken].append(turn)
+            except KeyError:
+                dictionary[last_spoken] = [turn]
         except KeyError:
-            dictionary[last_spoken] = [turn]
             last_spoken = 0
-    print(turn/30000000)
+            try:
+                dictionary[0] = [0]
+                dictionary[0][1] = turn
+            except KeyError:
+                last_spoken = 0
+        except IndexError:
+            last_spoken = 0
+            try:
+                dictionary[0][0] = dictionary[0][1]
+                dictionary[0][1] = turn
+            except KeyError:
+                dictionary[0] = turn
+            except IndexError:
+                dictionary[0].append(turn)
     turn += 1
-
 print(last_spoken)
